@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libonig-dev \
     libcurl4-openssl-dev \
-    libmysqlclient-dev \
+    default-libmysqlclient-dev \
     zip unzip curl \
     && docker-php-ext-install intl mbstring pdo pdo_mysql mysqli curl
 
