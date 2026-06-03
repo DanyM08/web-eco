@@ -1,12 +1,11 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libonig-dev \
     libcurl4-openssl-dev \
     zip unzip curl \
-    && docker-php-ext-install intl mbstring pdo pdo_mysql curl \
-    && a2enmod rewrite
+    && docker-php-ext-install intl mbstring pdo pdo_mysql curl
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -16,8 +15,6 @@ COPY . .
 
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+EXPOSE 8080
 
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-
-EXPOSE 80
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
